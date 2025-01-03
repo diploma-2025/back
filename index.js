@@ -1,0 +1,27 @@
+const express = require('express')
+const logger = require('morgan')
+const cors = require('cors')
+
+const {server} = require("./vars/config")
+const {connectDB} = require("./db");
+const AppDataSource = require("./ormconfig");
+const router = require("./vars/routes");
+
+
+const app = express()
+
+app.use(cors())
+app.use(express.json())
+app.use(logger('combined'))
+app.use("", router)
+
+connectDB()
+    .then(() => {
+        app.listen(server.port, server.host, async () => {
+            await AppDataSource.initialize()
+            console.log(`Сервер запустився: http://${server.host}:${server.port}/`)
+        })
+    })
+    .catch((e) => {
+        console.error(e)
+    })
