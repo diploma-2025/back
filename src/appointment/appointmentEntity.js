@@ -9,23 +9,28 @@ const AppointmentEntity = new EntitySchema({
             generated: true
         },
         date: {
-            type: Date,
+            type: 'timestamp',
             required: true,
             nullable: false
         },
         startTime: {
-            type: String,
+            type: 'varchar',
+            length: 5,
             required: true,
-            match: /^([01]\d|2[0-3]):([0-5]\d)$/
         },
         endTime: {
-            type: String,
-            match: /^([01]\d|2[0-3]):([0-5]\d)$/,
+            type: 'varchar',
+            length: 5,
         },
         userId: {
             type: 'int',
             required: true,
-            nullable: false
+            nullable: false,
+        },
+        patientId: {
+            type: 'int',
+            required: true,
+            nullable: false,
         }
     },
     relations: {
@@ -34,6 +39,14 @@ const AppointmentEntity = new EntitySchema({
             target: 'user',
             joinColumn: {
                 name: 'userId',
+                referencedColumnName: "id"
+            }
+        },
+        PatientEntity: {
+            type: 'many-to-one',
+            target: 'patient',
+            joinColumn: {
+                name: 'patientId',
                 referencedColumnName: "id"
             }
         }

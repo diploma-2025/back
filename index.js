@@ -9,8 +9,13 @@ const router = require("./vars/routes");
 
 
 const app = express()
+const corsOptions = {
+    origin: 'http://192.168.0.104:8080',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
 
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(logger('combined'))
 app.use("", router)

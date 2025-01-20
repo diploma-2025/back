@@ -1,4 +1,5 @@
-const {body, validationResult} = require("express-validator");
+const {body, validationResult} = require("express-validator")
+
 const createAppointmentValidator = [
     body('date')
         .notEmpty()
@@ -20,11 +21,11 @@ const createAppointmentValidator = [
         .withMessage("Вкажіть правильно годину")
         .matches(/^([01]\d|2[0-3]):([0-5]\d)$/)
         .withMessage("Вкажіть правильно годину"),
-    body('userId')
+    body('patientId')
         .notEmpty()
-        .withMessage("Потрібно вказати лікаря")
+        .withMessage("Потрібно вказати пацієнта")
         .isInt()
-        .withMessage("Вкажіть правильно лікаря"),
+        .withMessage('Вкажіть правильно пацієнта'),
     (req, res, next) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) return res.status(400).json({errors: errors.array()})

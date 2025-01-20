@@ -1,4 +1,4 @@
-const {createAppointmentValidator} = require("./appointmentValidator");
+const {createAppointmentValidator} = require("./appointmentValidators");
 const {createAppointment, findUserAppointments} = require("./appointmentFunctions");
 const {getUserValidator} = require("../user/userValidators");
 const appointmentRouter = require("express").Router()
@@ -16,7 +16,7 @@ appointmentRouter.get("/", getUserValidator, async (req, res) => {
 
 appointmentRouter.post("/", getUserValidator, createAppointmentValidator, async (req, res) => {
     try {
-        const appointment = await createAppointment(req.body)
+        const appointment = await createAppointment(req.body, req.userId)
         if (!appointment) return res.status(400).send("Прийом не створено")
 
         return res.status(201).json({message: "Прийом створено успішно"})

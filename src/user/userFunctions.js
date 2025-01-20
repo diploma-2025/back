@@ -10,9 +10,6 @@ const {jwt} = require("../../vars/config")
 const userRepository = AppDataSource.getRepository(UserEntity)
 
 const createUser = async (data) => {
-    const existingUser = await userRepository.findOneBy({email: data.email})
-    if (existingUser) throw new CustomError("Користувач вже існує", 400)
-
     const hashedPassword = await bcrypt.hash(data.password, 10)
     const user = userRepository.create({
         email: data.email,

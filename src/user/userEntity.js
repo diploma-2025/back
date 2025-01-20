@@ -6,7 +6,7 @@ const UserEntity = new EntitySchema({
         id: {
             type: "int",
             primary: true,
-            generated: true
+            generated: true,
         },
         username: {
             type: 'varchar',
@@ -14,7 +14,8 @@ const UserEntity = new EntitySchema({
         },
         email: {
             type: "varchar",
-            nullable: false
+            nullable: false,
+            unique: true
         },
         password: {
             type: "varchar",
