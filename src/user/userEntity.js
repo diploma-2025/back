@@ -1,5 +1,4 @@
 const {EntitySchema} = require("typeorm")
-const RoleEntity = require("../role/roleEntity");
 
 const UserEntity = new EntitySchema({
     name: "user",
@@ -8,6 +7,10 @@ const UserEntity = new EntitySchema({
             type: "int",
             primary: true,
             generated: true
+        },
+        username: {
+            type: 'varchar',
+            nullable: false
         },
         email: {
             type: "varchar",

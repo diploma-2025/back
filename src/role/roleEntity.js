@@ -11,7 +11,7 @@ const RoleEntity = new EntitySchema({
         name: {
             type: 'varchar',
             unique: true
-        }
+        },
     }
 })
 

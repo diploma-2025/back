@@ -3,6 +3,7 @@ const jsonwebtoken = require('jsonwebtoken')
 
 const AppDataSource = require('../../ormconfig')
 const UserEntity = require("./userEntity")
+
 const CustomError = require("../../vars/error")
 const {jwt} = require("../../vars/config")
 
@@ -16,6 +17,7 @@ const createUser = async (data) => {
     const user = userRepository.create({
         email: data.email,
         password: hashedPassword,
+        username: data.username,
         role: data.roleId || 3
     })
 

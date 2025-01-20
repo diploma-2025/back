@@ -1,12 +1,13 @@
 const userRouter = require("express").Router()
 
-const {createUserValidator} = require("../user/userValidators")
+const {createUserValidator, authUserValidator, getUserValidator} = require("../user/userValidators")
 const {createUser, assignToken, findUserAndAuthorize, findUserById} = require("./userFunctions");
-const {getUserValidator} = require("./userValidators");
+const {getTabsByRoleId} = require("../role/roleFunctions");
 
 userRouter.get('/', getUserValidator, async (req, res) => {
     try {
         const user = await findUserById(req.userId)
+        user.tabs = await getTabsByRoleId(user.role)
         return res.status(200).json(user)
     } catch (e) {
         return res.status(e.statusCode || 500).json({error: e.message})
@@ -26,7 +27,7 @@ userRouter.post("/", createUserValidator, async (req, res) => {
     }
 })
 
-userRouter.post('/authorization', createUserValidator, async (req, res) => {
+userRouter.post('/authorization', authUserValidator, async (req, res) => {
     try {
         const user = await findUserAndAuthorize(req.body)
         if (!user) return res.status(404).send("Користувача не знайдено")

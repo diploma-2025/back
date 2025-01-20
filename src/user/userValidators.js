@@ -1,9 +1,20 @@
 const {body, validationResult, header} = require("express-validator")
-const {token} = require("morgan");
-const CustomError = require("../../vars/error");
 const {verifyToken} = require("./userFunctions");
 
 const createUserValidator = [
+    body('email').isEmail().withMessage("Неправильний емайл"),
+    body('password').isLength({min: 6}).withMessage("Пароль має бути не менше 6 символів"),
+    body('username').isString()
+        .matches(/^[А-ЯІЇЄ][а-яіїє']+\s[А-ЯІЇЄ][а-яіїє']+\s[А-ЯІЇЄ][а-яіїє']+$/u)
+        .withMessage("Ім'я користувача повинно бути у форматі 'Прізвище Ім'я По батькові'"),
+    (req, res, next) => {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) return res.status(400).json({errors: errors.array()})
+        next()
+    }
+]
+
+const authUserValidator = [
     body('email').isEmail().withMessage("Неправильний емайл"),
     body('password').isLength({min: 6}).withMessage("Пароль має бути не менше 6 символів"),
     (req, res, next) => {
@@ -28,4 +39,4 @@ const getUserValidator = [
     }
 ]
 
-module.exports = {createUserValidator, getUserValidator}
+module.exports = {createUserValidator, authUserValidator, getUserValidator}
