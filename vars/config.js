@@ -17,4 +17,9 @@ const jwt = {
     secretKey: process.env.JWT_SECRET
 }
 
-module.exports = {server, db, jwt}
+const mailer = {
+    user: process.env.EMAIL,
+    pass: process.env.PASS,
+}
+
+module.exports = {server, db, jwt, mailer}

@@ -6,11 +6,22 @@ const UserEntity = require("./userEntity")
 
 const CustomError = require("../../vars/error")
 const {jwt} = require("../../vars/config")
+const {Not} = require("typeorm");
+const {sendEmail} = require("../../vars/nodemailer");
 
 const userRepository = AppDataSource.getRepository(UserEntity)
 
+const generatePassword = async () => {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 10; i++) result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    return result
+}
+
 const createUser = async (data) => {
-    const hashedPassword = await bcrypt.hash(data.password, 10)
+    const password = await generatePassword()
+    const hashedPassword = await bcrypt.hash(password, 10)
     const user = userRepository.create({
         email: data.email,
         password: hashedPassword,
@@ -18,7 +29,13 @@ const createUser = async (data) => {
         role: data.roleId || 3
     })
 
+    await sendEmail(data.email, password)
     return await userRepository.save(user)
+}
+
+const findAllUsers = async (userId) => {
+    const users = await userRepository.findBy({id: Not(userId)})
+    return users || []
 }
 
 const findUserById = async (userId) => {
@@ -37,14 +54,14 @@ const findUserAndAuthorize = async (data) => {
 }
 
 //TOKEN
-const assignToken = (userId) => {
-    return jsonwebtoken.sign({id: userId}, jwt.secretKey, {expiresIn: '8h'})
+const assignToken = (userId, roleId) => {
+    return jsonwebtoken.sign({id: userId, roleId: roleId}, jwt.secretKey, {expiresIn: '8h'})
 }
 
 const verifyToken = (token) => {
     return jsonwebtoken.verify(token, jwt.secretKey);
 }
 module.exports = {
-    createUser, findUserAndAuthorize, findUserById,
-    assignToken, verifyToken
+    createUser, findAllUsers, findUserAndAuthorize, findUserById,
+    assignToken, verifyToken, generatePassword
 }
