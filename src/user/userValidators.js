@@ -30,6 +30,7 @@ const getUserValidator = [
 
         const user = verifyToken(value.replace('Bearer ', ''))
         req.userId = user.id
+        req.roleId = user.roleId
         return true
     }),
     (req, res, next) => {

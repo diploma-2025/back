@@ -7,7 +7,7 @@ module.exports = class AddRoleTable1735922221757 {
         await queryRunner.query(`CREATE TABLE \`role\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, UNIQUE INDEX \`IDX_ae4578dcaed5adff96595e6166\` (\`name\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`
             INSERT INTO \`role\` (\`name\`) 
-            VALUES ('ADMIN'), ('DOCTOR'), ('NURSE')
+            VALUES ('АДМІН'), ('ЛІКАР'), ('МЕДСЕСТРА')
         `)
         await queryRunner.query(`ALTER TABLE \`user\` ADD \`role\` int NOT NULL`);
         await queryRunner.query(`ALTER TABLE \`user\` ADD CONSTRAINT \`FK_6620cd026ee2b231beac7cfe578\` FOREIGN KEY (\`role\`) REFERENCES \`role\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);

@@ -11,7 +11,7 @@ const router = require("./vars/routes");
 const app = express()
 const corsOptions = {
     origin: 'http://192.168.0.104:8080',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 };
 

@@ -33,8 +33,15 @@ const createUser = async (data) => {
     return await userRepository.save(user)
 }
 
-const findAllUsers = async (userId) => {
-    const users = await userRepository.findBy({id: Not(userId)})
+const findAllUsers = async (userId, roleId) => {
+    let options = {id: Not(userId)}
+    switch (roleId) {
+        case 2: {
+            options.role = 3
+            break;
+        }
+    }
+    const users = await userRepository.findBy(options)
     return users || []
 }
 
@@ -53,6 +60,14 @@ const findUserAndAuthorize = async (data) => {
     return user
 }
 
+const updateUserRole = async (userId, roleId) => {
+    return await userRepository.update(userId, {role: roleId})
+}
+
+const removeUserById = async (userId) => {
+    return await userRepository.remove({id: userId})
+}
+
 //TOKEN
 const assignToken = (userId, roleId) => {
     return jsonwebtoken.sign({id: userId, roleId: roleId}, jwt.secretKey, {expiresIn: '8h'})
@@ -62,6 +77,9 @@ const verifyToken = (token) => {
     return jsonwebtoken.verify(token, jwt.secretKey);
 }
 module.exports = {
-    createUser, findAllUsers, findUserAndAuthorize, findUserById,
-    assignToken, verifyToken, generatePassword
+    createUser,
+    findAllUsers, findUserAndAuthorize, findUserById,
+    updateUserRole,
+    removeUserById,
+    assignToken, verifyToken
 }
