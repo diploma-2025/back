@@ -1,4 +1,5 @@
 const {body, validationResult} = require("express-validator")
+const {getPatientById} = require("../patient/patientFunctions");
 
 const createAppointmentValidator = [
     body('date')

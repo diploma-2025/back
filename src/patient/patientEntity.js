@@ -14,8 +14,8 @@ const PatientEntity = new EntitySchema({
             unique: true,
         },
         phone: {
-            type: "varchar",
-            unique: true,
+            type: "simple-array",
+            nullable: true,
         }
     }
 })

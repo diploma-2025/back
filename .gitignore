@@ -4,5 +4,4 @@ node_modules/
 Thumbs.db
 .vscode/
 .idea
-package-lock.json
 /dist/

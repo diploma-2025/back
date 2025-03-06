@@ -1,6 +1,5 @@
 const {body, validationResult, header} = require("express-validator")
 const {verifyToken} = require("./userFunctions");
-const CustomError = require("../../vars/error");
 
 const createUserValidator = [
     body('email').isEmail().withMessage("Неправильний емайл"),

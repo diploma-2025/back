@@ -1,6 +1,7 @@
 const {createAppointmentValidator} = require("./appointmentValidators");
 const {createAppointment, findUserAppointments} = require("./appointmentFunctions");
 const {getUserValidator} = require("../user/userValidators");
+const {getPatientById} = require("../patient/patientFunctions");
 const appointmentRouter = require("express").Router()
 
 appointmentRouter.get("/", getUserValidator, async (req, res) => {
@@ -16,6 +17,9 @@ appointmentRouter.get("/", getUserValidator, async (req, res) => {
 
 appointmentRouter.post("/", getUserValidator, createAppointmentValidator, async (req, res) => {
     try {
+        const patient = await getPatientById(req.patientId)
+        if (!patient) return res.status(404).json({error: "Пацієнта не знайдено"})
+
         const appointment = await createAppointment(req.body, req.userId)
         if (!appointment) return res.status(400).send("Прийом не створено")
 

@@ -36,7 +36,7 @@ userRouter.get("/", getUserValidator, async (req, res) => {
     }
 })
 
-userRouter.post("/", getAdminValidator, createUserValidator, async (req, res) => {
+userRouter.post("/", createUserValidator, async (req, res) => {
     try {
         const user = await createUser(req.body)
         if (!user) return res.status(400).send("Користувача не створено")
