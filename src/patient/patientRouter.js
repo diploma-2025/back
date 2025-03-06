@@ -1,7 +1,7 @@
 const patientRouter = require('express').Router()
 
 const {getUserValidator} = require("../user/userValidators")
-const {createPatient, getPatients, getPatientById, updatePatient} = require("./patientFunctions");
+const {createPatient, getPatients, getPatientById, updatePatient, removePatientById} = require("./patientFunctions");
 const {createPatientValidator, updatePatientValidator} = require("./patientValidators")
 const {updateUserRole} = require("../user/userFunctions");
 
@@ -35,11 +35,21 @@ patientRouter.post('/', getUserValidator, createPatientValidator, async (req, re
     }
 })
 
-patientRouter.patch('/patient', getUserValidator, updatePatientValidator, async (req, res) => {
+patientRouter.patch('/', getUserValidator, updatePatientValidator, async (req, res) => {
     const {patientId} = req.body;
     try {
         const updatedPatient = await updatePatient(req.body, patientId)
         if (updatedPatient.affected === 0) return res.status(404).send("Сталася помилка")
+        return res.status(201).json("Пацієнта успішно змінено")
+    } catch (e) {
+        return res.status(e.statusCode || 500).json({error: e.message})
+    }
+})
+
+patientRouter.delete('/', getUserValidator, async (req, res) => {
+    const {patientId} = req.body;
+    try {
+        await removePatientById(patientId)
         return res.status(201).json("Пацієнта успішно змінено")
     } catch (e) {
         return res.status(e.statusCode || 500).json({error: e.message})

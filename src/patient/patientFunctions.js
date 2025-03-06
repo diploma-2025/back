@@ -29,4 +29,8 @@ const updatePatient = async (data, patientId) => {
     return await patientRepository.update({id: patientId}, data)
 }
 
-module.exports = {createPatient, getPatientById, getPatients, updatePatient}
+const removePatientById = async (patientId) => {
+    return await patientRepository.remove({id: patientId})
+}
+
+module.exports = {createPatient, getPatientById, getPatients, updatePatient, removePatientById}
