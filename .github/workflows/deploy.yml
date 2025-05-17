@@ -4,11 +4,7 @@ on:
     workflows: ["Security Check"]
     types: [completed]
 
-jobs:
-  security_check:
-    name: Security Check
-    uses: ./.github/workflows/security-check.yml
-    
+jobs:   
   deploy:
     runs-on: self-hosted
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
