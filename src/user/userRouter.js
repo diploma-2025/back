@@ -11,7 +11,7 @@ const {
     updateUser, findAllNurses
 } = require("./userFunctions");
 const {getTabsByRoleId, getRoleName, getRoleId} = require("../role/roleFunctions");
-const {getAdminValidator} = require("./userValidators");
+const {getAdminValidator, authRateLimiter} = require("./userValidators");
 
 userRouter.get('/user', getUserValidator, async (req, res) => {
     try {
@@ -73,7 +73,7 @@ userRouter.post("/nurse", getUserValidator, createUserValidator, async (req, res
     }
 })
 
-userRouter.post('/authorization', authUserValidator, async (req, res) => {
+userRouter.post('/authorization', authRateLimiter, authUserValidator, async (req, res) => {
     try {
         const user = await findUserAndAuthorize(req.body)
         if (!user) return res.status(404).send("Користувача не знайдено")

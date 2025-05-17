@@ -1,5 +1,12 @@
 const {body, validationResult, header} = require("express-validator")
 const {verifyToken} = require("./userFunctions");
+const rateLimit = require("express-rate-limit");
+
+const authRateLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 5,
+    message: "Забагато спроб авторизації"
+})
 
 const createUserValidator = [
     body('email').isEmail().withMessage("Неправильний емайл"),
@@ -55,4 +62,4 @@ const getAdminValidator = [
     }
 ]
 
-module.exports = {createUserValidator, authUserValidator, getUserValidator, getAdminValidator}
+module.exports = {authRateLimiter, createUserValidator, authUserValidator, getUserValidator, getAdminValidator}
