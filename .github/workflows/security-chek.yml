@@ -9,6 +9,10 @@ on:
 jobs:
   analyze:
     runs-on: self-hosted
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
