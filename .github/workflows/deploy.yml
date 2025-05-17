@@ -4,8 +4,13 @@ on:
     branches: ['master']
 
 jobs:
+  security_check:
+    name: Security Check
+    uses: ./.github/workflows/security-check.yml
+    
   deploy:
     runs-on: self-hosted
+    needs: security_check
     steps:
       - name: Deploy to VPS
         run: |
