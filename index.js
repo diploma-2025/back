@@ -17,9 +17,6 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(logger('combined'))
 app.use("", router)
-app.get("/", async (req, res) => {
-    res.send("Удачний деплой!")
-})
 connectDB()
     .then(() => {
         app.listen(server.port, async () => {
