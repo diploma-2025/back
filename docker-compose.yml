@@ -1,0 +1,7 @@
+services:
+  backend:
+    container_name: diploma_server
+    build: .
+    ports:
+      - "8000:8000"
+    restart: always

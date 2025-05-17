@@ -34,7 +34,25 @@ const UserEntity = new EntitySchema({
                 name: 'role',
                 referencedColumnName: "id"
             }
-        }
+        },
+        patients: {
+            type: 'many-to-many',
+            target: 'patient',
+            joinTable: {
+                name: "users_patients",
+                joinColumn: {name: "userId", referencedColumnName: "id"},
+                inverseJoinColumn: {name: "patientId", referencedColumnName: "id"}
+            }
+        },
+        createdBy: {
+            type: 'many-to-one',
+            target: 'user',
+            joinColumn: {
+                name: 'createdBy',
+                referencedColumnName: "id"
+            },
+            nullable: true,
+        },
     }
 })
 

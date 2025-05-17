@@ -43,24 +43,27 @@ const createAppointment = async (data, userId) => {
 }
 
 const findUserAppointments = async (userId, date) => {
-    let appointments = await appointmentRepository.findBy({userId: userId, date: date})
-    for (let app of appointments) {
-        app.user = (await userRepository.findOne({
-            where: {id: app.userId},
-            select: ['username']
-        }))?.username
-        app.patient = await patientRepository.findOneBy({id: app.patientId})
-        delete app.patientId
-        delete app.userId
-    }
 
-    appointments.sort((a, b) => {
-        const aStart = convertToDate(a.startTime);
-        const bStart = convertToDate(b.startTime);
-
-        return aStart - bStart
-    });
-    return appointments
+    let appointments = await appointmentRepository.find({
+        where: {userId: userId, date: date},
+        select: {
+            id: true,
+            date: true,
+            startTime: true,
+            endTime: true,
+            user: {
+                id: true,
+                username: true
+            },
+            patient: {
+                id: true,
+                username: true,
+                isDeleted: true
+            }
+        },
+        relations: ['user', 'patient'],
+    })
+    return appointments?.filter(app => app.patient.isDeleted === false)
 }
 
 

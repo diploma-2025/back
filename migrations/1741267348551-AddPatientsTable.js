@@ -13,7 +13,7 @@ module.exports = class AddPatientsTable1741267348551 {
         await queryRunner.query(`ALTER TABLE \`appointment\` ADD \`startTime\` varchar(5) NOT NULL`);
         await queryRunner.query(`ALTER TABLE \`appointment\` DROP COLUMN \`endTime\``);
         await queryRunner.query(`ALTER TABLE \`appointment\` ADD \`endTime\` varchar(5) NOT NULL`);
-        await queryRunner.query(`ALTER TABLE \`appointment\` ADD CONSTRAINT \`FK_5ce4c3130796367c93cd817948e\` FOREIGN KEY (\`patientId\`) REFERENCES \`patient\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE \`appointment\` ADD CONSTRAINT \`FK_5ce4c3130796367c93cd817948e\` FOREIGN KEY (\`patientId\`) REFERENCES \`patient\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`);
     }
 
     async down(queryRunner) {

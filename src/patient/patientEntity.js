@@ -16,6 +16,17 @@ const PatientEntity = new EntitySchema({
         phone: {
             type: "simple-array",
             nullable: true,
+        },
+        isDeleted: {
+            type: 'boolean',
+            default: false,
+        }
+    },
+    relations: {
+        users: {
+            type: 'many-to-many',
+            target: 'user',
+            inverseSide: 'patients',
         }
     }
 })

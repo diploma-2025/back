@@ -29,20 +29,36 @@ const createUser = async (data) => {
         role: data.roleId || 3
     })
 
+    await userRepository.save(user)
     await sendEmail(data.email, password)
-    return await userRepository.save(user)
+
+    return user
 }
 
-const findAllUsers = async (userId, roleId) => {
-    let options = {id: Not(userId)}
-    switch (roleId) {
-        case 2: {
-            options.role = 3
-            break;
-        }
-    }
-    const users = await userRepository.findBy(options)
-    return users || []
+const createNurse = async (data, userId) => {
+    const doctor = await userRepository.findOneBy({id: userId})
+    if (!doctor) throw new CustomError("Лікаря не знайдено", 401)
+
+    const password = await generatePassword()
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const nurse = userRepository.create({
+        email: data.email,
+        password: hashedPassword,
+        username: data.username,
+        role: 3,
+        createdBy: {id: doctor.id}
+    })
+    await userRepository.save(nurse)
+    await sendEmail(data.email, password)
+    return nurse
+}
+
+const findAllUsers = async (userId) => {
+    return await userRepository.findBy({id: Not(userId)})
+}
+
+const findAllNurses = async (userId) => {
+    return await userRepository.findBy({createdBy: {id: userId}})
 }
 
 const findUserById = async (userId) => {
@@ -60,12 +76,12 @@ const findUserAndAuthorize = async (data) => {
     return user
 }
 
-const updateUserRole = async (userId, roleId) => {
-    return await userRepository.update(userId, {role: roleId})
+const updateUser = async (userId, username, roleId) => {
+    return await userRepository.update(userId, {username: username, role: roleId})
 }
 
 const removeUserById = async (userId) => {
-    return await userRepository.remove({id: userId})
+    return await userRepository.delete({id: userId})
 }
 
 //TOKEN
@@ -76,10 +92,11 @@ const assignToken = (userId, roleId) => {
 const verifyToken = (token) => {
     return jsonwebtoken.verify(token, jwt.secretKey);
 }
+
 module.exports = {
-    createUser,
-    findAllUsers, findUserAndAuthorize, findUserById,
-    updateUserRole,
+    createUser, createNurse,
+    findAllUsers, findUserAndAuthorize, findUserById, findAllNurses,
+    updateUser,
     removeUserById,
     assignToken, verifyToken
 }

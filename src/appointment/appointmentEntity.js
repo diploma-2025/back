@@ -34,7 +34,7 @@ const AppointmentEntity = new EntitySchema({
         }
     },
     relations: {
-        UserEntity: {
+        user: {
             type: 'many-to-one',
             target: 'user',
             joinColumn: {
@@ -42,7 +42,7 @@ const AppointmentEntity = new EntitySchema({
                 referencedColumnName: "id"
             }
         },
-        PatientEntity: {
+        patient: {
             type: 'many-to-one',
             target: 'patient',
             joinColumn: {
