@@ -5,8 +5,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
-    labels: ["test-vps"]
+    runs-on: [self-hosted, test-vps]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
