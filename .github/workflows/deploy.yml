@@ -1,0 +1,21 @@
+name: Auto Deploy Backend
+on:
+  push:
+    branches: ['master']
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    labels: ["test-vps"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS
+        run: |
+          echo "Deploying backend..."
+          cd  project/back
+          git pull origin master
+          docker-compose down
+          docker-compose up -d --build
+          echo "Backend deployed successfully"
