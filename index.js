@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(logger('combined'))
 app.use("", router)
 app.get("/", async (req, res) => {
-    res.send("Hello World!1")
+    res.send("Hello World!")
 })
 connectDB()
     .then(() => {
